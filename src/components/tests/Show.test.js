@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { getByRole, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import Show from "./../Show";
@@ -9,9 +9,9 @@ const testShow = {
   name: "Fake Show",
   summary: "Fake show summary",
   seasons: [
-    { id: 0, name: "Fake Season 1", episodes: [] },
-    { id: 1, name: "Fake Season 2", episodes: [] },
-    { id: 2, name: "Fake Season 3", episodes: [] },
+    { id: 1, name: "Fake Season 1", episodes: [] },
+    { id: 2, name: "Fake Season 2", episodes: [] },
+    { id: 3, name: "Fake Season 3", episodes: [] },
   ],
 };
 
@@ -37,7 +37,22 @@ test("renders same number of options seasons are passed in", () => {
   expect(selectOptions).toHaveLength(3);
 });
 
-test("handleSelect is called when an season is selected", () => {});
+test("handleSelect is called when a season is selected", () => {
+  //handleSelect mock
+  const fakeHandleSelect = jest.fn();
+
+  render(
+    <Show
+      show={testShow}
+      selectedSeason={"none"}
+      handleSelect={fakeHandleSelect}
+    />
+  );
+  const select = screen.getByRole("combobox");
+  userEvent.selectOptions(select, "1");
+
+  expect(fakeHandleSelect).toHaveBeenCalled();
+});
 
 test("component renders when no seasons are selected and when rerenders with a season passed in", () => {});
 
